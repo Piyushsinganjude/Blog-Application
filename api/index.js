@@ -6,6 +6,7 @@ const Post = require('./models/Post');
 const bcrypt = require('bcryptjs');
 const app = express();
 const jwt = require('jsonwebtoken');
+const dotenv = require('dotenv');
 const cookieParser = require('cookie-parser');
 const multer = require('multer');
 const uploadMiddleware = multer({ dest: 'uploads/' });
@@ -18,9 +19,10 @@ app.use(cors({credentials:true,origin:'http://localhost:3000'}));
 app.use(express.json());
 app.use(cookieParser());
 app.use('/uploads', express.static(__dirname + '/uploads'));
+dotenv.config();
 
 mongoose.set('strictQuery', true);
-mongoose.connect('mongodb+srv://piyushsinganjude007:e7lIWp9ELhKdzM0M@cluster0.6waojjq.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
+mongoose.connect(process.env.MONGO_URI);
 
 app.post('/register', async (req,res) => {
   const {username,password} = req.body;
@@ -136,4 +138,5 @@ app.get('/post/:id', async (req, res) => {
 })
 
 app.listen(4000);
-//
+
+
